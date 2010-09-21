@@ -1,0 +1,58 @@
+#!/bin/sh
+
+skeleton=`dirname $0`/skeleton
+
+if [ "$#" != 3 ]
+then
+    cat <<EOF 
+
+USAGE: 
+   $0  organization  appname  version
+
+for example
+
+   $0  com.mycompany.mydivision  helloworld  0.0.1
+
+EOF
+    exit 1
+fi
+
+org=$1;     shift
+name=$1;    shift
+version=$1; shift
+
+files=`ls`
+if [ "$files" != "" ]
+then
+    echo "ERROR: current directory is not empty"
+    exit 2
+fi
+
+set -x
+
+cp --archive $skeleton/* .
+cat - $skeleton/Makefile >Makefile <<EOF
+ORG=$org
+NAME=$name
+VERSION=$version
+EOF
+
+palm-generate --property="{'id':'$org.$name','version':'$version','vendor':'$org'}" $name
+
+fixups=$name/app/assistants/stage-assistant.js
+
+for fixup in $fixups
+do
+    tmp=/tmp/$$`basename $fixup`
+    mv $fixup $tmp
+    cat - $tmp >$fixup <<EOF
+/*jslint white: false */
+EOF
+    rm $tmp
+done
+
+
+#mv $name/appinfo.json /tmp/$$appinfo
+#sed </tmp/$$appinfo >$name/appinfo.json
+#rm /tmp/$$appinfo
+ 
