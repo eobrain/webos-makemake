@@ -1,0 +1,13 @@
+Create a Makefile-driven build environment for command-line WebOS developers.
+
+This only works on Unix-like systems.  It has been tested on Linux, but might also work on MacOS, and on Windows with Cygwin installed.
+
+(1) Install the WebOS SDK
+ https://developer.palm.com/index.php?option=com_content&view=article&layout=page&id=1788&Itemid=21#
+
+(2) Create an empty directory, and "cd" into it in a terminal window.
+
+(3) Execute the "webos-makemake" script in this directory
+    ../path/to/webos-makemake com.mycompany.mydivision  helloworld  0.0.1
+(changing appropriately)
+
